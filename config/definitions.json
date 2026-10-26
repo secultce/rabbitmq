@@ -1,0 +1,45 @@
+{
+    "exchanges": [
+        {
+            "name": "exchange_notification_dlx",
+            "vhost": "/",
+            "type": "direct",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        }
+    ],
+    "queues": [
+        {
+            "name": "queue_import_registration_dlq",
+            "vhost": "/",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {}
+        }
+    ],
+    "bindings": [
+        {
+            "source": "exchange_notification_dlx",
+            "vhost": "/",
+            "destination": "queue_import_registration_dlq",
+            "destination_type": "queue",
+            "routing_key": "module_import_registration_draft_dlq",
+            "arguments": {}
+        }
+    ],
+    "policies": [
+        {
+            "vhost": "/",
+            "name": "import-registration-dlx",
+            "pattern": "^queue_import_registration$",
+            "apply-to": "queues",
+            "definition": {
+                "dead-letter-exchange": "exchange_notification_dlx",
+                "dead-letter-routing-key": "module_import_registration_draft_dlq"
+            },
+            "priority": 10
+        }
+    ]
+}
