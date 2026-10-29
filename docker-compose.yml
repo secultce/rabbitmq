@@ -11,6 +11,7 @@ services:
       - lab
     volumes:
      - $PWD/storage/rabbitmq:/var/lib/rabbitmq
+     - $PWD/config/definitions.json:/etc/rabbitmq/definitions.json:ro
     environment:
      - RABBITMQ_ERLANG_COOKIE=This_is_my_secret_phrase
      - RABBITMQ_DEFAULT_USER=mqadmin
