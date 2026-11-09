@@ -8,6 +8,15 @@
             "auto_delete": false,
             "internal": false,
             "arguments": {}
+        },
+        {
+            "name": "exchange_notification_retry",
+            "vhost": "/",
+            "type": "direct",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
         }
     ],
     "queues": [
@@ -17,6 +26,39 @@
             "durable": true,
             "auto_delete": false,
             "arguments": {}
+        },
+        {
+            "name": "queue_import_registration_retry_1",
+            "vhost": "/",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-message-ttl": 60000,
+                "x-dead-letter-exchange": "exchange_notification",
+                "x-dead-letter-routing-key": "module_import_registration_draft"
+            }
+        },
+        {
+            "name": "queue_import_registration_retry_2",
+            "vhost": "/",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-message-ttl": 300000,
+                "x-dead-letter-exchange": "exchange_notification",
+                "x-dead-letter-routing-key": "module_import_registration_draft"
+            }
+        },
+        {
+            "name": "queue_import_registration_retry_3",
+            "vhost": "/",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-message-ttl": 900000,
+                "x-dead-letter-exchange": "exchange_notification",
+                "x-dead-letter-routing-key": "module_import_registration_draft"
+            }
         }
     ],
     "bindings": [
@@ -26,6 +68,30 @@
             "destination": "queue_import_registration_dlq",
             "destination_type": "queue",
             "routing_key": "module_import_registration_draft_dlq",
+            "arguments": {}
+        },
+        {
+            "source": "exchange_notification_retry",
+            "vhost": "/",
+            "destination": "queue_import_registration_retry_1",
+            "destination_type": "queue",
+            "routing_key": "module_import_registration_draft_retry_1",
+            "arguments": {}
+        },
+        {
+            "source": "exchange_notification_retry",
+            "vhost": "/",
+            "destination": "queue_import_registration_retry_2",
+            "destination_type": "queue",
+            "routing_key": "module_import_registration_draft_retry_2",
+            "arguments": {}
+        },
+        {
+            "source": "exchange_notification_retry",
+            "vhost": "/",
+            "destination": "queue_import_registration_retry_3",
+            "destination_type": "queue",
+            "routing_key": "module_import_registration_draft_retry_3",
             "arguments": {}
         }
     ],
